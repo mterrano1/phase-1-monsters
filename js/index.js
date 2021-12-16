@@ -33,6 +33,14 @@ function createForm(){
 
 createForm();
 
+// document.querySelector('#forward').addEventListener('click', () => {
+//     pageNum++
+// });
+
+document.querySelector('#back').addEventListener('click', () => {
+    console.log('clicked')
+});
+
 document.querySelector('#monster-form').addEventListener('submit', (e) => {
     e.preventDefault();
     let inputName = e.target[0].value;
@@ -84,13 +92,22 @@ function renderOneMonster(monster){
 
 renderOneMonster();
 
-function getMonsters(){
-    fetch('http://localhost:3000/monsters/?_limit=50&_page=1')
+// document.querySelector('#forward').addEventListener('click', () => {
+//     pageNum = 1
+//     getMonsters(pageNum++);
+// })
+
+function getMonsters(pageNum = 1){
+    document.querySelector('#forward').addEventListener('click', () => {
+        getMonsters(pageNum+1);
+    });
+    fetch(`http://localhost:3000/monsters/?_limit=50&_page=${pageNum}`)
     .then(res => res.json())
     .then(monsters => {
         monsters.forEach(monster => renderOneMonster(monster))
     })
 };
+
 
 }
 
