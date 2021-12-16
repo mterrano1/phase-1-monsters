@@ -33,14 +33,6 @@ function createForm(){
 
 createForm();
 
-// document.querySelector('#forward').addEventListener('click', () => {
-//     pageNum++
-// });
-
-document.querySelector('#back').addEventListener('click', () => {
-    console.log('clicked')
-});
-
 document.querySelector('#monster-form').addEventListener('submit', (e) => {
     e.preventDefault();
     let inputName = e.target[0].value;
@@ -71,6 +63,26 @@ function postFetch(){
     .then(data => renderOneMonster(data))
 };
 
+let count = 1;
+
+document.querySelector('#forward').addEventListener('click', () => {
+    count++;
+    getMonsters(count);
+})
+
+document.querySelector('#back').addEventListener('click', () => {
+    count--;
+    getMonsters(count);
+});
+
+const monstContain = document.querySelector('#monster-container');
+
+function clearPage(parent){
+    while (parent.firstChild) {
+        parent.removeChild(parent.firstChild);
+    }
+}
+
 getMonsters();
 
 // DOM Render Function
@@ -92,22 +104,14 @@ function renderOneMonster(monster){
 
 renderOneMonster();
 
-// document.querySelector('#forward').addEventListener('click', () => {
-//     pageNum = 1
-//     getMonsters(pageNum++);
-// })
-
-function getMonsters(pageNum = 1){
-    document.querySelector('#forward').addEventListener('click', () => {
-        getMonsters(pageNum+1);
-    });
+function getMonsters(pageNum){
+    clearPage(monstContain);
     fetch(`http://localhost:3000/monsters/?_limit=50&_page=${pageNum}`)
     .then(res => res.json())
     .then(monsters => {
         monsters.forEach(monster => renderOneMonster(monster))
     })
 };
-
 
 }
 
